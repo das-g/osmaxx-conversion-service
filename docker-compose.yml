@@ -4,6 +4,29 @@ data:
   volumes:
     - /home/njordan/tmp/t:/tmp
 
+restapi:
+  extends:
+    file: common-services.yml
+    service: webapp
+  build: .
+  ports:
+    - "8000:8000"
+  entrypoint: [honcho, -f, ./rest_api/Procfile, start]
+#  entrypoint: [sh, -c]
+  volumes:
+    - .:/home/py
+  volumes_from:
+    - data
+  links:
+    - managerdatabase:database
+    - redis
+  environment:
+    - DJANGO_SETTINGS_MODULE=rest_api.config.settings.local
+
+managerdatabase:
+  image: geometalab/postgis:9.4
+
+
 rqdashboard:
   build: rq-dashboard
   links:
@@ -28,7 +51,7 @@ worker:
     - workerdatabase:database
     - redis
   environment:
-    - DJANGO_SETTINGS_MODULE=osmaxx_conversion_service.config.settings.worker
+    - DJANGO_SETTINGS_MODULE=rest_api.config.settings.worker
     - PGHOST=database
 
 workerdatabase:

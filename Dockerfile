@@ -71,7 +71,7 @@ ADD ./manager $HOME/manager
 ADD ./worker $HOME/worker
 
 # expose modules
-ENV PYTHONPATH=PYTHONPATH:$HOME
-ENV DJANGO_SETTINGS_MODULE=osmaxx_conversion_service.config.settings.local
+ENV PYTHONPATH=$PYTHONPATH:$HOME
+ENV DJANGO_SETTINGS_MODULE=rest_api.config.settings.local
 
 ENTRYPOINT ["/bin/sh", "-c"]
